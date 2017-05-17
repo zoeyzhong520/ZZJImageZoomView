@@ -49,14 +49,25 @@ static CGRect oldFrame;
         [holderView addSubview:showImgView];
         
         //动画放大所展示的ImageView
+        __block CGFloat x,y,width,height;
         [UIView animateWithDuration:0.4 animations:^{
-            CGFloat y,width,height;
-            y = (screenHeight - image.size.height * screenWidth / image.size.width) * 0.5;
-            //宽度为屏幕宽度
-            width = screenWidth;
-            //高度 根据图片宽高比设置
-            height = image.size.height * screenWidth / image.size.width;
-            [showImgView setFrame:CGRectMake(0, y, width, height)];\
+            if (image.size.width > image.size.height) {
+                x = 0;
+                y = (screenHeight - image.size.height * screenWidth / image.size.width) * 0.5;
+                //宽度为屏幕宽度
+                width = screenWidth;
+                //高度 根据图片宽高比设置
+                height = image.size.height * screenWidth / image.size.width;
+            }else{
+                x = (screenWidth - image.size.width * screenHeight / image.size.height) * 0.5;
+                y = 0;
+                //宽度 根据图片宽高比设置
+                width = image.size.width * screenHeight / image.size.height;
+                //高度为屏幕高度
+                height = screenHeight;
+            }
+            
+            [showImgView setFrame:CGRectMake(x, y, width, height)];
             //将视图显示出来
             [holderView setAlpha:1];
         } completion:^(BOOL finished) {
